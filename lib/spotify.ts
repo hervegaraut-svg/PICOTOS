@@ -11,8 +11,15 @@ type SpotifyTrack = {
 };
 
 export const getAccessToken = async () => {
+  const clientId = process.env.SPOTIFY_CLIENT_ID?.trim();
+  const clientSecret = process.env.SPOTIFY_CLIENT_SECRET?.trim();
+
+  if (!clientId || !clientSecret) {
+    throw new Error("SPOTIFY_CLIENT_ID ou SPOTIFY_CLIENT_SECRET manquant");
+  }
+
   const credentials = Buffer.from(
-    `${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`,
+    `${clientId}:${clientSecret}`,
   ).toString("base64");
 
   const response = await fetch("https://accounts.spotify.com/api/token", {
@@ -26,7 +33,8 @@ export const getAccessToken = async () => {
   });
 
   if (!response.ok) {
-    throw new Error("Impossible de récupérer le token Spotify");
+    const detail = await response.text();
+    throw new Error(`Impossible de récupérer le token Spotify (${response.status}): ${detail}`);
   }
 
   const data = await response.json();
@@ -44,7 +52,8 @@ export const searchTracks = async (query: string) => {
   });
 
   if (!response.ok) {
-    throw new Error("Recherche Spotify indisponible");
+    const detail = await response.text();
+    throw new Error(`Recherche Spotify indisponible (${response.status}): ${detail}`);
   }
 
   const data = await response.json();
