@@ -4,10 +4,17 @@ type PhotoItem = {
   emoji: string | null;
   photo_url: string | null;
   event_date: string | null;
+  author_id: string;
   profiles: { name: string } | null;
 };
 
-export function PhotoGrid({ photos }: { photos: PhotoItem[] }) {
+type PhotoGridProps = {
+  photos: PhotoItem[];
+  viewerId: string | null;
+  onDelete: (photoId: string) => void;
+};
+
+export function PhotoGrid({ photos, viewerId, onDelete }: PhotoGridProps) {
   const gradients = [
     "from-[#faf7f2] to-[#f4e6d7]",
     "from-[#f6ece2] to-[#efe1cf]",
@@ -26,6 +33,15 @@ export function PhotoGrid({ photos }: { photos: PhotoItem[] }) {
           <h3 className="text-sm font-semibold">{photo.title}</h3>
           <p className="text-[11px] text-brown/75">{photo.profiles?.name ?? "Membre"}</p>
           <p className="text-[11px] text-brown/60">{photo.event_date ?? "Date inconnue"}</p>
+          {viewerId && photo.author_id === viewerId ? (
+            <button
+              type="button"
+              onClick={() => onDelete(photo.id)}
+              className="mt-2 rounded-lg border border-sand px-2 py-1 text-[11px]"
+            >
+              Supprimer
+            </button>
+          ) : null}
         </article>
       ))}
     </div>

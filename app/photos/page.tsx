@@ -20,6 +20,7 @@ export default function PhotosPage() {
   const [photos, setPhotos] = useState<PhotoRow[]>([]);
   const [members, setMembers] = useState<MemberFilter[]>([]);
   const [selectedMember, setSelectedMember] = useState("all");
+  const [viewerId, setViewerId] = useState<string | null>(null);
   const [title, setTitle] = useState("");
   const [emoji, setEmoji] = useState("📸");
   const [eventDate, setEventDate] = useState("");
@@ -50,6 +51,18 @@ export default function PhotosPage() {
 
   useEffect(() => {
     void load();
+  }, []);
+
+  useEffect(() => {
+    const loadViewer = async () => {
+      const supabase = createBrowserSupabaseClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setViewerId(user?.id ?? null);
+    };
+
+    void loadViewer();
   }, []);
 
   const filtered = useMemo(
@@ -88,6 +101,34 @@ export default function PhotosPage() {
     await load();
   };
 
+  const extractStoragePath = (photoUrl: string) => {
+    const marker = "/storage/v1/object/public/photos/";
+    const markerIndex = photoUrl.indexOf(marker);
+    if (markerIndex === -1) return null;
+    return decodeURIComponent(photoUrl.slice(markerIndex + marker.length));
+  };
+
+  const onDeletePhoto = async (photoId: string) => {
+    if (!viewerId) return;
+
+    const target = photos.find((photo) => photo.id === photoId);
+    if (!target || target.author_id !== viewerId) return;
+
+    if (!window.confirm("Supprimer cette photo ?")) return;
+
+    const supabase = createBrowserSupabaseClient();
+
+    if (target.photo_url) {
+      const storagePath = extractStoragePath(target.photo_url);
+      if (storagePath) {
+        await supabase.storage.from("photos").remove([storagePath]);
+      }
+    }
+
+    await supabase.from("photos").delete().eq("id", photoId).eq("author_id", viewerId);
+    await load();
+  };
+
   return (
     <section className="space-y-4">
       <form onSubmit={onSubmit} className="card-soft space-y-2">
@@ -119,7 +160,7 @@ export default function PhotosPage() {
         </select>
       </div>
 
-      <PhotoGrid photos={filtered} />
+      <PhotoGrid photos={filtered} viewerId={viewerId} onDelete={onDeletePhoto} />
     </section>
   );
 }
