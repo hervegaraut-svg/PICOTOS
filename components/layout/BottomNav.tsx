@@ -11,6 +11,10 @@ const tabs = [
   { href: "/playlist", label: "Playlist", icon: "🎵" },
   { href: "/on-this-day", label: "Souvenirs", icon: "🕰️" },
   { href: "/quiz", label: "Quiz", icon: "🧩" },
+  { href: "/voices", label: "Voix", icon: "🎙️" },
+  { href: "/capsule", label: "Capsule", icon: "⏳" },
+  { href: "/map", label: "Carte", icon: "🗺️" },
+  { href: "/wishlist", label: "Souhaits", icon: "🎁" },
 ];
 
 export function BottomNav() {
@@ -18,7 +22,13 @@ export function BottomNav() {
 
   return (
     <nav className="fixed bottom-0 left-1/2 z-30 w-full max-w-md -translate-x-1/2 border-t border-sand bg-cream/95 px-2 py-2 backdrop-blur">
-      <div className="grid grid-cols-6 gap-1">
+      <div
+        className="flex gap-1 overflow-x-auto"
+        style={{
+          scrollbarWidth: "none",
+          WebkitOverflowScrolling: "touch",
+        }}
+      >
         {tabs.map((tab) => {
           const active = pathname.startsWith(tab.href);
           return (
@@ -26,7 +36,7 @@ export function BottomNav() {
               key={tab.href}
               href={tab.href}
               className={clsx(
-                "flex flex-col items-center rounded-xl px-1 py-1 text-[10px] transition",
+                "flex min-w-16 shrink-0 flex-col items-center rounded-xl px-2 py-1 text-[10px] transition",
                 active ? "bg-terracotta text-white" : "text-brown hover:bg-sand/60",
               )}
             >
