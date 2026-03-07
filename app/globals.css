@@ -3,25 +3,43 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --brown: #5c4a3a;
+  --terracotta: #c47a45;
+  --cream: #faf7f2;
+  --sand: #e8d5c0;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--brown);
+  background: var(--cream);
+  font-family: var(--font-lato), sans-serif;
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  .fade-up {
+    animation: fadeUp 0.5s ease-out both;
+  }
+
+  .card-soft {
+    @apply rounded-2xl border border-[#e8d5c0] bg-white/80 p-4 shadow-sm;
+  }
+
+  .btn-main {
+    @apply rounded-xl bg-terracotta px-4 py-2 font-semibold text-white transition hover:brightness-95 active:scale-[0.98];
+  }
+
+  .btn-outline {
+    @apply rounded-xl border border-terracotta px-4 py-2 font-semibold text-terracotta transition hover:bg-terracotta hover:text-white active:scale-[0.98];
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

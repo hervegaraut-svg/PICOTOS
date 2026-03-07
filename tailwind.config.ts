@@ -9,8 +9,14 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        brown: "#5c4a3a",
+        terracotta: "#c47a45",
+        cream: "#faf7f2",
+        sand: "#e8d5c0",
+      },
+      fontFamily: {
+        title: ["var(--font-playfair)", "serif"],
+        body: ["var(--font-lato)", "sans-serif"],
       },
     },
   },

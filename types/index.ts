@@ -1,0 +1,74 @@
+export type Member = {
+  id: string;
+  phone: string;
+  name: string;
+  role: string | null;
+  avatar: string | null;
+  location: string | null;
+  first_login: boolean;
+  is_admin: boolean;
+  created_at: string;
+};
+
+export type Post = {
+  id: string;
+  author_id: string;
+  content: string;
+  photo_url: string | null;
+  likes_count: number;
+  comments_count: number;
+  created_at: string;
+  author?: Pick<Member, "name" | "avatar">;
+};
+
+export type Photo = {
+  id: string;
+  author_id: string;
+  title: string;
+  emoji: string | null;
+  photo_url: string | null;
+  event_date: string | null;
+  created_at: string;
+};
+
+export type FamilyEvent = {
+  id: string;
+  title: string;
+  event_date: string;
+  type: string;
+  concerned: string | null;
+  created_by: string | null;
+  created_at: string;
+};
+
+export type Track = {
+  id: string;
+  added_by: string;
+  spotify_id: string;
+  title: string;
+  artist: string;
+  album: string | null;
+  cover_url: string | null;
+  preview_url: string | null;
+  spotify_url: string;
+  personal_note: string | null;
+  likes_count: number;
+  created_at: string;
+};
+
+export type QuizQuestion = {
+  id: string;
+  category: string;
+  question: string;
+  options: string[];
+  correct_answer: number;
+};
+
+export type QuizScore = {
+  id: string;
+  user_id: string;
+  category: string;
+  score: number;
+  total: number;
+  played_at: string;
+};
