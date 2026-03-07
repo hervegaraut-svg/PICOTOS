@@ -17,7 +17,7 @@ WITH seed(phone, name, role, avatar, location, first_login, is_admin) AS (
     ('+33623163395', 'Karine', 'Membre', '👤', 'France 🇫🇷', true, false),
     ('+33751693050', 'Marine', 'Membre', '👤', 'France 🇫🇷', true, false),
     ('+33680532890', 'Sylvie', 'Membre', '👤', 'France 🇫🇷', true, false),
-    ('+33674429426', 'Hervé', 'Membre', '👤', 'France 🇫🇷', true, false),
+    ('+33674429426', 'Hervé', 'Membre', '👤', 'France 🇫🇷', true, true),
     ('+33770045271', 'Anne-Sophie', 'Membre', '👤', 'France 🇫🇷', true, false),
     ('+33624345558', 'Sébastien', 'Membre', '👤', 'France 🇫🇷', true, false),
     ('+33649427594', 'Antonin', 'Membre', '👤', 'France 🇫🇷', true, false),

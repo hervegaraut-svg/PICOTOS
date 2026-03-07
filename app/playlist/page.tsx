@@ -32,6 +32,7 @@ export default function PlaylistPage() {
   const [query, setQuery] = useState("");
   const [searchResults, setSearchResults] = useState<SpotifyResult[]>([]);
   const [noteByTrack, setNoteByTrack] = useState<Record<string, string>>({});
+  const [searchError, setSearchError] = useState("");
 
   const load = async () => {
     const supabase = createBrowserSupabaseClient();
@@ -65,9 +66,20 @@ export default function PlaylistPage() {
   const search = async (event: FormEvent) => {
     event.preventDefault();
     if (!query.trim()) return;
-    const response = await fetch(`/api/spotify/search?q=${encodeURIComponent(query)}`);
+    setSearchError("");
+    const response = await fetch(`/api/spotify/search?q=${encodeURIComponent(query)}`, {
+      credentials: "include",
+    });
     const data = await response.json();
+    if (!response.ok) {
+      setSearchResults([]);
+      setSearchError(data.error ?? "Recherche indisponible.");
+      return;
+    }
     setSearchResults(data.tracks ?? []);
+    if (!(data.tracks ?? []).length) {
+      setSearchError("Aucun résultat trouvé pour cette recherche.");
+    }
   };
 
   const addTrack = async (track: SpotifyResult) => {
@@ -106,6 +118,7 @@ export default function PlaylistPage() {
         <button className="btn-main" type="submit">
           Rechercher
         </button>
+        {searchError ? <p className="text-sm text-red-600">{searchError}</p> : null}
       </form>
 
       {searchResults.length ? (
