@@ -1,6 +1,7 @@
 export type Member = {
   id: string;
   phone: string;
+  email: string | null;
   name: string;
   role: string | null;
   avatar: string | null;

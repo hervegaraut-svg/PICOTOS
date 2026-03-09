@@ -15,6 +15,7 @@ export function MemberTable({ members, onReset, onDelete }: MemberTableProps) {
           <tr className="text-brown/70">
             <th className="pb-2">Nom</th>
             <th className="pb-2">Numéro</th>
+            <th className="pb-2">Email</th>
             <th className="pb-2">Rôle</th>
             <th className="pb-2">Statut</th>
             <th className="pb-2">Actions</th>
@@ -27,6 +28,7 @@ export function MemberTable({ members, onReset, onDelete }: MemberTableProps) {
                 {member.avatar ?? "👤"} {member.name}
               </td>
               <td className="py-2">{member.phone}</td>
+              <td className="py-2 text-brown/60">{member.email ?? "—"}</td>
               <td className="py-2">{member.role ?? "—"}</td>
               <td className="py-2">
                 {member.first_login ? (

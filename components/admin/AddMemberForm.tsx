@@ -7,6 +7,7 @@ export function AddMemberForm({ action }: AddMemberFormProps) {
     <form action={action} className="card-soft space-y-3">
       <h2 className="font-title text-xl italic text-terracotta">Ajouter un membre</h2>
       <input name="phone" required placeholder="+33612345678" className="w-full rounded-xl border border-sand px-3 py-2" />
+      <input name="email" type="email" placeholder="Email (pour les notifications)" className="w-full rounded-xl border border-sand px-3 py-2" />
       <input name="name" required placeholder="Prénom" className="w-full rounded-xl border border-sand px-3 py-2" />
       <input name="role" placeholder="Rôle familial" className="w-full rounded-xl border border-sand px-3 py-2" />
       <input name="avatar" placeholder="Emoji avatar (👤)" className="w-full rounded-xl border border-sand px-3 py-2" />

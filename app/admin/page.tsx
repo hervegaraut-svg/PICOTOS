@@ -33,6 +33,7 @@ export default async function AdminPage() {
     await assertAdmin();
 
     const phone = String(formData.get("phone") ?? "").trim();
+    const memberEmail = String(formData.get("email") ?? "").trim();
     const name = String(formData.get("name") ?? "").trim();
     const role = String(formData.get("role") ?? "").trim();
     const avatar = String(formData.get("avatar") ?? "👤").trim();
@@ -40,10 +41,10 @@ export default async function AdminPage() {
     if (!phone || !name) return;
 
     const adminClient = createAdminClient();
-    const email = phoneToPseudoEmail(phone);
+    const authEmail = phoneToPseudoEmail(phone);
 
     const { data: created, error } = await adminClient.auth.admin.createUser({
-      email,
+      email: authEmail,
       password: "1234",
       email_confirm: true,
     });
@@ -53,6 +54,7 @@ export default async function AdminPage() {
     await adminClient.from("profiles").insert({
       id: created.user.id,
       phone: phone.startsWith("+") ? phone : `+${normalizePhone(phone)}`,
+      email: memberEmail || null,
       name,
       role: role || null,
       avatar: avatar || "👤",

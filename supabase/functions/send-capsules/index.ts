@@ -16,6 +16,7 @@ type ProfileRow = {
   id: string;
   name: string;
   phone: string;
+  email: string | null;
 };
 
 const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
@@ -27,7 +28,6 @@ const appUrl = Deno.env.get("APP_URL") ?? "https://picotos.vercel.app";
 const supabase = createClient(supabaseUrl, serviceRoleKey);
 const resend = new Resend(resendApiKey);
 
-const phoneToPseudoEmail = (phone: string) => `${phone.replace(/\D+/g, "")}@picotosfamily.app`;
 
 Deno.serve(async () => {
   const today = new Date().toISOString().slice(0, 10);
@@ -46,7 +46,7 @@ Deno.serve(async () => {
     return new Response(JSON.stringify({ message: "No capsules to open" }), { status: 200 });
   }
 
-  const { data: allProfiles, error: profilesError } = await supabase.from("profiles").select("id, name, phone");
+  const { data: allProfiles, error: profilesError } = await supabase.from("profiles").select("id, name, phone, email");
   if (profilesError || !allProfiles) {
     return new Response(JSON.stringify({ error: profilesError?.message ?? "Profiles unavailable" }), { status: 500 });
   }
@@ -69,11 +69,11 @@ Deno.serve(async () => {
       </div>
     `;
 
-    for (const member of allProfiles as ProfileRow[]) {
-      const email = phoneToPseudoEmail(member.phone);
+    const recipients = (allProfiles as ProfileRow[]).filter((m) => m.email);
+    for (const member of recipients) {
       await resend.emails.send({
         from: resendFrom,
-        to: email,
+        to: member.email!,
         subject: `💌 Une capsule de ${authorName} s'est ouverte !`,
         html,
       });
